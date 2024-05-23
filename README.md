@@ -51,18 +51,19 @@ Interview_app/
 │
 ├── static/
 │   ├── images/
-│   └── styles.css  # CSS file for styling
+│   └── styles.css        # CSS file for styling
 │
 ├── templates/
-│   └── index.html  # HTML file for the front end
+│   └── index.html        # HTML file for the front end
 │
-├── app.py  # Main Flask application
-├── camera_capture.py  # Script for capturing images from the webcam
-├── database.py  # Script for handling database interactions
-├── mouse_monitor.py  # Script for monitoring mouse events
-├── README.md  # Project documentation
-├── requirements.txt  # List of required Python packages
-└── view_database.py  # Script for viewing database entries
+├── app.py                # Main Flask application
+├── camera_capture.py     # Script for capturing images from the webcam
+├── database.py           # Script for handling database interactions
+├── mouse_monitor.py      # Script for monitoring mouse events
+├── README.md             # Project documentation
+├── requirements.txt      # List of required Python packages
+└── view_database.py      # Script for viewing database entries
+
 
 
 ## How It Works
