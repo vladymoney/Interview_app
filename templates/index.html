@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mouse and Webcam Capture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Mouse and Webcam Capture</h1>
+        <p>Mouse Position: <span id="mouse-pos">X: 0, Y: 0</span></p>
+        <div class="image-section" style="text-align: center;">
+            <h3>Captured Image</h3>
+            <img id="captured-image" style="display:none;" />
+            <p id="message"></p>
+        </div>
+        <div class="mouse-history">
+            <h3>Mouse Events History</h3>
+            <ul id="mouse-events"></ul>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+
+        socket.on('response', function (data) {
+            console.log(data.message);
+        });
+
+        document.addEventListener('click', function (event) {
+            if (event.button === 0) {
+                var x = event.clientX;
+                var y = event.clientY;
+                socket.emit('mouse_click', { x: x, y: y });
+
+                var mouseEventsList = document.getElementById('mouse-events');
+                var listItem = document.createElement('li');
+                listItem.innerText = `X: ${x}, Y: ${y}`;
+                mouseEventsList.appendChild(listItem);
+
+                if (mouseEventsList.children.length > 10) {
+                    mouseEventsList.removeChild(mouseEventsList.firstChild);
+                }
+            }
+        });
+
+        document.addEventListener('mousemove', function (event) {
+            document.getElementById('mouse-pos').innerText = `X: ${event.clientX}, Y: ${event.clientY}`;
+        });
+
+        socket.on('image_data', function (data) {
+            console.log('Received image_data:', data);
+            var imgElement = document.getElementById('captured-image');
+            var imagePath = data.image_path;
+            console.log('Setting image source to:', imagePath);
+            imgElement.src = imagePath;
+            imgElement.style.display = 'block';
+            document.getElementById('message').innerText = data.message;
+        });
+    </script>
+</body>
+
+</html>
