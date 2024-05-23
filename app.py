@@ -5,6 +5,7 @@ import threading
 import queue
 from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO
+from database import init_db, insert_data  # Ensure to import database functions
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -20,6 +21,7 @@ def index():
 @socketio.on('mouse_click')
 def handle_mouse_click(data):
     print(f"Mouse clicked at: {data}")
+    insert_data('mouse_click', x=data['x'], y=data['y'])  # Insert mouse click data into the database
     capture_event.set()
 
 def capture_image(event, queue):
@@ -47,6 +49,7 @@ def capture_image(event, queue):
             message = "Why are you hiding?"
 
         queue.put(('image', img_name, message))
+        insert_data('image', image_path=img_name, message=message)  # Insert image capture data into the database
         img_counter += 1
         event.clear()
 
@@ -62,6 +65,8 @@ def process_queue():
             socketio.emit('image_data', {'image_path': '/' + image_path, 'message': message})
 
 if __name__ == '__main__':
+    init_db()  # Initialize the database when the app starts
+
     capture_thread = threading.Thread(target=capture_image, args=(capture_event, capture_queue))
     capture_thread.start()
 
