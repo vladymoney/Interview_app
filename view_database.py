@@ -1,10 +1,10 @@
 import sqlite3
 
 def view_data():
-    conn = sqlite3.connect('events.db')
+    conn = sqlite3.connect('app.db')
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM events')
+    cursor.execute('SELECT * FROM data')
     rows = cursor.fetchall()
 
     for row in rows:
