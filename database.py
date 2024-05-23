@@ -39,4 +39,4 @@ def fetch_all_data():
         print("Error fetching data:", e)
         return []
 
-init_db()  # Initialize the database when this module is executed
+init_db()
